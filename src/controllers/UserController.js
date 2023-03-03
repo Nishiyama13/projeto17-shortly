@@ -1,4 +1,6 @@
 import { db } from "../config/database.connections.js";
+import bcrypt from "bcrypt";
+import { V4 as uuidV4 } from "uuid";
 
 export async function signUp(req, res) {
   try {

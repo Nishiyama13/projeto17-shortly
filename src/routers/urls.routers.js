@@ -5,10 +5,10 @@ import { authValidation } from "../middlewares/authMiddleware.js";
 import {
   shortenUrl,
   getShortenUrlById,
+  openShortenUrl,
 } from "../controllers/UrlsController.js";
 // getShortenUrl,
 
-// openShortenUrl,
 // deleteShortenUrl
 
 const urlsRouter = Router();
@@ -21,7 +21,7 @@ urlsRouter.post(
 );
 //urlsRouter.get("/urls", getShortenUrl);
 urlsRouter.get("/urls/:id", getShortenUrlById);
-//urlsRouter.get("/urls/open/:shortUrl", openShortenUrl);
+urlsRouter.get("/urls/open/:shortUrl", openShortenUrl);
 //urlsRouter.delete("/urls/:id", deleteShortenUrl);
 
 export default urlsRouter;

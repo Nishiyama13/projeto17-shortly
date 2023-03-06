@@ -74,16 +74,34 @@ export async function getUserInformation(req, res) {
         id: row.id,
         shortUrl: row.shortUrl,
         url: row.url,
-        visitCounter: row.visitCounter,
+        visitCount: row.visitCounter,
       };
     });
 
     res.send({
       id: user.id,
       name: user.name,
-      visitCounter: visitCounter.sum || 0,
+      visitCount: visitCounter.sum || 0,
       shortsUrls,
     });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+export async function getRanking(req, res) {
+  try {
+    const { rows } = await db.query(`
+    SELECT users.id, users.name,
+    COUNT(shortens.id) AS "linksCount",
+    COALESCE(SUM(shortens."visitCounter"),0) AS "visitCount"
+    FROM users
+    LEFT JOIN shortens ON shortens."userId" = users.id
+    GROUP BY users.id, shortens."visitCounter"
+    ORDER BY "visitCount" DESC
+    LIMIT 10 `);
+
+    res.send(rows);
   } catch (error) {
     return res.status(500).send(error.message);
   }

@@ -2,7 +2,6 @@ import { db } from "../config/database.connections.js";
 import { nanoid } from "nanoid";
 
 // getShortenUrl,
-// deleteShortenUrl
 
 export async function shortenUrl(req, res) {
   const { url } = req.body;

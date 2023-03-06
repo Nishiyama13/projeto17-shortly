@@ -54,3 +54,37 @@ export async function signIn(req, res) {
 
   res.sendStatus(401);
 }
+
+export async function getUserInformation(req, res) {
+  const { user } = res.locals;
+
+  try {
+    const visits = await db.query(
+      `SELECT SUM (shortens."visitCounter") FROM shortens WHERE "userId" = $1`,
+      [user.id]
+    );
+    const [visitCounter] = visits.rows;
+
+    const urlRes = await db.query(
+      `SELECT * FROM shortens WHERE "userId" = $1`,
+      [user.id]
+    );
+    const shortsUrls = urlRes.rows.map((row) => {
+      return {
+        id: row.id,
+        shortUrl: row.shortUrl,
+        url: row.url,
+        visitCounter: row.visitCounter,
+      };
+    });
+
+    res.send({
+      id: user.id,
+      name: user.name,
+      visitCounter: visitCounter.sum || 0,
+      shortsUrls,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}

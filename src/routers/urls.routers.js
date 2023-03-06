@@ -6,10 +6,9 @@ import {
   shortenUrl,
   getShortenUrlById,
   openShortenUrl,
+  deleteShortenUrl,
 } from "../controllers/UrlsController.js";
 // getShortenUrl,
-
-// deleteShortenUrl
 
 const urlsRouter = Router();
 
@@ -22,6 +21,6 @@ urlsRouter.post(
 //urlsRouter.get("/urls", getShortenUrl);
 urlsRouter.get("/urls/:id", getShortenUrlById);
 urlsRouter.get("/urls/open/:shortUrl", openShortenUrl);
-//urlsRouter.delete("/urls/:id", deleteShortenUrl);
+urlsRouter.delete("/urls/:id", authValidation, deleteShortenUrl);
 
 export default urlsRouter;

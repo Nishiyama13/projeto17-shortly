@@ -2,8 +2,6 @@ import { db } from "../config/database.connections.js";
 import { nanoid } from "nanoid";
 
 // getShortenUrl,
-
-// openShortenUrl,
 // deleteShortenUrl
 
 export async function shortenUrl(req, res) {
@@ -71,6 +69,26 @@ export async function openShortenUrl(req, res) {
     );
 
     res.redirect(url.url);
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+export async function deleteShortenUrl(req, res) {
+  const { id } = req.params;
+  const { user } = res.locals;
+
+  try {
+    const result = await db.query(`SELECT * FROM shortens WHERE id = $1`, [id]);
+
+    if (result.rowCount === 0) return res.sendStatus(404);
+
+    const [url] = result.rows;
+
+    if (url.userId !== user.id) return res.sendStatus(401);
+
+    await db.query(`DELETE FROM shortens WHERE id = $1`, [id]);
+    res.sendStatus(204);
   } catch (error) {
     return res.status(500).send(error.message);
   }

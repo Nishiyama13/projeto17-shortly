@@ -3,7 +3,7 @@ export function validateMiddleware(schema) {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      const errorMessages = error.details.map(err => err.message);
+      const errorMessages = error.details.map((err) => err.message);
 
       return res.status(400).send(errorMessages);
     }

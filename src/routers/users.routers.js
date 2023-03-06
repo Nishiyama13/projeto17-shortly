@@ -6,7 +6,6 @@ import {
   signUp,
   signIn,
   getUserInformation,
-  getRanking,
 } from "../controllers/UsersController.js";
 import { authValidation } from "../middlewares/authMiddleware.js";
 
@@ -15,6 +14,5 @@ const usersRouter = Router();
 usersRouter.post("/signup", validateMiddleware(SignUpSchema), signUp);
 usersRouter.post("/signin", validateMiddleware(SignInSchema), signIn);
 usersRouter.get("/users/me", authValidation, getUserInformation);
-usersRouter.get("/ranking", getRanking);
 
 export default usersRouter;
